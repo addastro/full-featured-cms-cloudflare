@@ -1,0 +1,39 @@
+{
+  "name": "leverage-ai-cms-backend",
+  "version": "1.0.0",
+  "description": "LEVERAGE AI CMS - Cloudflare Workers Backend API",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --env production",
+    "deploy:dev": "wrangler deploy --env development",
+    "test": "wrangler dev --local",
+    "logs": "wrangler tail",
+    "create-kv": "npm run create-kv:content && npm run create-kv:users && npm run create-kv:cache",
+    "create-kv:content": "wrangler kv:namespace create CONTENT && wrangler kv:namespace create CONTENT --preview",
+    "create-kv:users": "wrangler kv:namespace create USERS && wrangler kv:namespace create USERS --preview",
+    "create-kv:cache": "wrangler kv:namespace create CACHE && wrangler kv:namespace create CACHE --preview",
+    "create-vectorize": "wrangler vectorize create cms-search --dimensions=768 --metric=cosine",
+    "create-d1": "wrangler d1 create cms-production",
+    "setup-databases": "npm run create-kv && npm run create-vectorize && npm run create-d1"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.12"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "cms",
+    "ai",
+    "vectorize",
+    "leverage-ai"
+  ],
+  "author": "LEVERAGE AI",
+  "license": "PROPRIETARY"
+}
