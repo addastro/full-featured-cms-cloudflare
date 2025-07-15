@@ -6,10 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 [env.production]
 name = "leverage-ai-cms-prod"
 
-# Enhanced for CMS workloads
-[limits]
-cpu_ms = 50000
-
 # CMS requires multiple bindings
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
