@@ -15,10 +15,10 @@ id = "4c59b1de85d14cceaedb3e035f14ae44"
 binding = "USERS"
 id = "9752b6b3810746179e454de37eb8c4b0"
 
-# CACHE KV namespace - will be added after creation
-# [[env.production.kv_namespaces]]
-# binding = "CACHE"
-# id = "YOUR_CACHE_KV_ID"
+# CACHE KV namespace - ✅ NOW CONFIGURED!
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "480efbb3a94e4668876fb153c3b8e9c5"
 
 [[env.production.vectorize]]
 binding = "SEARCH_INDEX"
@@ -50,7 +50,7 @@ id = "4c59b1de85d14cceaedb3e035f14ae44"
 binding = "USERS"
 id = "9752b6b3810746179e454de37eb8c4b0"
 
-# CACHE KV namespace - will be added after creation
+# CACHE KV namespace - TODO: Create separate dev cache namespace
 # [[env.development.kv_namespaces]]
 # binding = "CACHE"
 # id = "YOUR_DEV_CACHE_KV_ID"
