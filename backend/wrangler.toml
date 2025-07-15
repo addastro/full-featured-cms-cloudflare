@@ -16,7 +16,7 @@ id = "4c59b1de85d14cceaedb3e035f14ae44"
 
 [[env.production.kv_namespaces]]
 binding = "USERS"
-id = "YOUR_USERS_KV_ID"
+id = "9752b6b3810746179e454de37eb8c4b0"
 
 [[env.production.kv_namespaces]]
 binding = "CACHE"
@@ -50,7 +50,7 @@ id = "4c59b1de85d14cceaedb3e035f14ae44"
 
 [[env.development.kv_namespaces]]
 binding = "USERS"
-id = "YOUR_DEV_USERS_KV_ID"
+id = "9752b6b3810746179e454de37eb8c4b0"
 
 [[env.development.kv_namespaces]]
 binding = "CACHE"
