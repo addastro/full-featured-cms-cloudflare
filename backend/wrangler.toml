@@ -12,7 +12,7 @@ cpu_ms = 50000
 # CMS requires multiple bindings
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
-id = "YOUR_CONTENT_KV_ID"
+id = "4c59b1de85d14cceaedb3e035f14ae44"
 
 [[env.production.kv_namespaces]]
 binding = "USERS"
@@ -46,7 +46,7 @@ name = "leverage-ai-cms-dev"
 
 [[env.development.kv_namespaces]]
 binding = "CONTENT"
-id = "YOUR_DEV_CONTENT_KV_ID"
+id = "4c59b1de85d14cceaedb3e035f14ae44"
 
 [[env.development.kv_namespaces]]
 binding = "USERS"
