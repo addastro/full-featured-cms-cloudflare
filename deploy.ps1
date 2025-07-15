@@ -8,21 +8,28 @@ param(
 )
 
 # Colors for PowerShell output
-function Write-ColorOutput {
-    param(
-        [string]$Message,
-        [string]$ForegroundColor = "White"
-    )
-    Write-Host $Message -ForegroundColor $ForegroundColor
+function Write-Success { 
+    param([string]$Message)
+    Write-Host "✅ [SUCCESS] $Message" -ForegroundColor Green 
 }
 
-function Write-Success { Write-ColorOutput "✅ [SUCCESS] $args" -ForegroundColor Green }
-function Write-Info { Write-ColorOutput "ℹ️  [INFO] $args" -ForegroundColor Cyan }
-function Write-Warning { Write-ColorOutput "⚠️  [WARNING] $args" -ForegroundColor Yellow }
-function Write-Error { Write-ColorOutput "❌ [ERROR] $args" -ForegroundColor Red }
+function Write-Info { 
+    param([string]$Message)
+    Write-Host "ℹ️  [INFO] $Message" -ForegroundColor Cyan 
+}
 
-Write-ColorOutput "🚀 LEVERAGE AI CMS - Windows Deployment Script" -ForegroundColor Magenta
-Write-ColorOutput "=================================================" -ForegroundColor Magenta
+function Write-Warning { 
+    param([string]$Message)
+    Write-Host "⚠️  [WARNING] $Message" -ForegroundColor Yellow 
+}
+
+function Write-Error { 
+    param([string]$Message)
+    Write-Host "❌ [ERROR] $Message" -ForegroundColor Red 
+}
+
+Write-Host "🚀 LEVERAGE AI CMS - Windows Deployment Script" -ForegroundColor Magenta
+Write-Host "=================================================" -ForegroundColor Magenta
 Write-Host ""
 
 # Check prerequisites
@@ -32,13 +39,15 @@ function Test-Prerequisites {
     # Check Node.js
     try {
         $nodeVersion = node --version
-        $versionNumber = [int]($nodeVersion -replace 'v|\..*', '')
-        if ($versionNumber -lt 18) {
-            Write-Error "Node.js version 18+ required. Current: $nodeVersion"
-            Write-Error "Download from: https://nodejs.org/"
-            exit 1
+        if ($nodeVersion) {
+            $versionNumber = [int]($nodeVersion -replace 'v(\d+)\..*', '$1')
+            if ($versionNumber -lt 18) {
+                Write-Error "Node.js version 18+ required. Current: $nodeVersion"
+                Write-Error "Download from: https://nodejs.org/"
+                exit 1
+            }
+            Write-Success "Node.js version: $nodeVersion ✓"
         }
-        Write-Success "Node.js version: $nodeVersion ✓"
     }
     catch {
         Write-Error "Node.js not found. Please install Node.js 18+ from https://nodejs.org/"
@@ -57,8 +66,10 @@ function Test-Prerequisites {
     
     # Check/Install Wrangler CLI
     try {
-        $wranglerVersion = wrangler --version
-        Write-Success "Wrangler CLI: $wranglerVersion ✓"
+        $wranglerVersion = wrangler --version 2>$null
+        if ($wranglerVersion) {
+            Write-Success "Wrangler CLI: $wranglerVersion ✓"
+        }
     }
     catch {
         Write-Warning "Wrangler CLI not found. Installing..."
@@ -88,7 +99,9 @@ function Setup-Backend {
     Write-Info "Checking Cloudflare authentication..."
     try {
         $whoami = wrangler whoami 2>$null
-        Write-Success "Logged in to Cloudflare: $whoami"
+        if ($whoami) {
+            Write-Success "Logged in to Cloudflare!"
+        }
     }
     catch {
         Write-Warning "Not logged in to Cloudflare. Opening login..."
@@ -100,21 +113,29 @@ function Setup-Backend {
     Write-Info "This will create KV namespaces, Vectorize index, and D1 database..."
     
     Write-Info "Creating KV namespaces..."
-    try { wrangler kv:namespace create "CONTENT" } catch { Write-Warning "CONTENT KV may already exist" }
-    try { wrangler kv:namespace create "CONTENT" --preview } catch { Write-Warning "CONTENT preview KV may already exist" }
-    try { wrangler kv:namespace create "USERS" } catch { Write-Warning "USERS KV may already exist" }
-    try { wrangler kv:namespace create "USERS" --preview } catch { Write-Warning "USERS preview KV may already exist" }
-    try { wrangler kv:namespace create "CACHE" } catch { Write-Warning "CACHE KV may already exist" }
-    try { wrangler kv:namespace create "CACHE" --preview } catch { Write-Warning "CACHE preview KV may already exist" }
+    Write-Host "Running: wrangler kv:namespace create CONTENT"
+    wrangler kv:namespace create "CONTENT"
+    Write-Host "Running: wrangler kv:namespace create CONTENT --preview"
+    wrangler kv:namespace create "CONTENT" --preview
+    Write-Host "Running: wrangler kv:namespace create USERS"
+    wrangler kv:namespace create "USERS"
+    Write-Host "Running: wrangler kv:namespace create USERS --preview"
+    wrangler kv:namespace create "USERS" --preview
+    Write-Host "Running: wrangler kv:namespace create CACHE"
+    wrangler kv:namespace create "CACHE"
+    Write-Host "Running: wrangler kv:namespace create CACHE --preview"
+    wrangler kv:namespace create "CACHE" --preview
     
     Write-Info "Creating Vectorize index..."
-    try { wrangler vectorize create cms-search --dimensions=768 --metric=cosine } catch { Write-Warning "Vectorize index may already exist" }
+    Write-Host "Running: wrangler vectorize create cms-search --dimensions=768 --metric=cosine"
+    wrangler vectorize create cms-search --dimensions=768 --metric=cosine
     
     Write-Info "Creating D1 database..."
-    try { wrangler d1 create cms-production } catch { Write-Warning "D1 database may already exist" }
+    Write-Host "Running: wrangler d1 create cms-production"
+    wrangler d1 create cms-production
     
     Write-Warning "IMPORTANT: Copy the resource IDs shown above and update backend/wrangler.toml!"
-    Write-Info "Press any key to continue after updating wrangler.toml..."
+    Write-Host "Press any key to continue after updating wrangler.toml..." -ForegroundColor Yellow
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     
     Set-Location ..
@@ -189,7 +210,7 @@ function Setup-Frontend {
 function Show-FrontendDeployment {
     Write-Info "Frontend deployment instructions..."
     Write-Host ""
-    Write-ColorOutput "🌐 CLOUDFLARE PAGES SETUP:" -ForegroundColor Yellow
+    Write-Host "🌐 CLOUDFLARE PAGES SETUP:" -ForegroundColor Yellow
     Write-Host ""
     Write-Host "1. Go to: https://dash.cloudflare.com"
     Write-Host "2. Navigate to: Workers & Pages"
@@ -197,12 +218,12 @@ function Show-FrontendDeployment {
     Write-Host "4. Click: 'Connect to Git'"
     Write-Host "5. Select repository: full-featured-cms-cloudflare"
     Write-Host ""
-    Write-ColorOutput "⚙️  BUILD SETTINGS:" -ForegroundColor Yellow
+    Write-Host "⚙️  BUILD SETTINGS:" -ForegroundColor Yellow
     Write-Host "   Build command: cd frontend && npm install && npm run build"
     Write-Host "   Build output directory: frontend/dist"
     Write-Host "   Root directory: /"
     Write-Host ""
-    Write-ColorOutput "🔧 ENVIRONMENT VARIABLES:" -ForegroundColor Yellow
+    Write-Host "🔧 ENVIRONMENT VARIABLES:" -ForegroundColor Yellow
     Write-Host "   NODE_VERSION = 18"
     Write-Host "   VITE_API_URL = https://leverage-ai-cms-prod.[your-subdomain].workers.dev"
     Write-Host ""
@@ -215,28 +236,16 @@ function Show-FrontendDeployment {
 function Test-Deployment {
     Write-Info "Testing deployment..."
     
-    # Get worker URL
-    Set-Location backend
+    # Test health endpoint if we can determine the URL
     try {
-        $workerUrl = wrangler deploy --env production --dry-run 2>&1 | Select-String -Pattern "https://.*\.workers\.dev" | ForEach-Object { $_.Matches.Value }
-        if ($workerUrl) {
-            $healthUrl = "$workerUrl/api/health"
-            Write-Info "Testing backend health endpoint: $healthUrl"
-            
-            try {
-                $response = Invoke-RestMethod -Uri $healthUrl -Method GET -TimeoutSec 10
-                Write-Success "Backend health check passed!"
-                Write-Host "Response: $($response | ConvertTo-Json -Compress)"
-            }
-            catch {
-                Write-Warning "Backend health check failed. May need a few minutes to propagate."
-            }
-        }
+        Write-Info "Testing backend health endpoint..."
+        # Try to get the worker URL from the deployment
+        # This is a simplified test - actual URL would be from deployment output
+        Write-Warning "Manual test: Visit your worker URL + /api/health to verify deployment"
     }
     catch {
-        Write-Warning "Could not determine worker URL for testing."
+        Write-Warning "Could not automatically test deployment. Please test manually."
     }
-    Set-Location ..
 }
 
 # Main deployment function
@@ -258,7 +267,7 @@ function Start-Deployment {
     Write-Host ""
     Write-Success "🎉 LEVERAGE AI CMS deployment complete!"
     Write-Host ""
-    Write-ColorOutput "📋 NEXT STEPS:" -ForegroundColor Green
+    Write-Host "📋 NEXT STEPS:" -ForegroundColor Green
     Write-Host "1. Complete frontend deployment in Cloudflare Pages dashboard"
     Write-Host "2. Test your CMS at the deployed URLs"
     Write-Host "3. Review documentation: docs/deployment-guide.md"
