@@ -27,9 +27,9 @@ binding = "SEARCH_INDEX"
 index_name = "cms-search"
 
 [[env.production.d1_databases]]
-binding = "CMS_DB"
+binding = "DB"
 database_name = "cms-production"
-database_id = "YOUR_D1_DATABASE_ID"
+database_id = "ae1c1e4a-7254-47be-9f78-eed73ec264ae"
 
 [env.production.ai]
 binding = "AI"
@@ -59,6 +59,11 @@ id = "YOUR_DEV_CACHE_KV_ID"
 [[env.development.vectorize]]
 binding = "SEARCH_INDEX"
 index_name = "cms-search-dev"
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "cms-production-dev"
+database_id = "ae1c1e4a-7254-47be-9f78-eed73ec264ae"
 
 [env.development.ai]
 binding = "AI"
