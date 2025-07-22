@@ -1,6 +1,6 @@
 name = "leverage-ai-cms"
 main = "src/index.js"
-compatibility_date = "2025-01-01"
+compatibility_date = "2025-07-07"
 compatibility_flags = ["nodejs_compat"]
 
 [env.production]
@@ -9,16 +9,16 @@ name = "leverage-ai-cms-prod"
 # CMS requires multiple bindings
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
-id = "4c59b1de85d14cceaedb3e035f14ae44"
+id = "8aa7ae21fcd6492a9c60a238d5d83e54"
 
 [[env.production.kv_namespaces]]
 binding = "USERS"
-id = "9752b6b3810746179e454de37eb8c4b0"
+id = "b43c3075153246de9abadfa1b7a53125"
 
 # CACHE KV namespace - ✅ NOW CONFIGURED!
 [[env.production.kv_namespaces]]
 binding = "CACHE"
-id = "480efbb3a94e4668876fb153c3b8e9c5"
+id = "5aec1ca2eef74413b44865535e43aa81"
 
 [[env.production.vectorize]]
 binding = "SEARCH_INDEX"
@@ -27,7 +27,7 @@ index_name = "cms-search"
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "cms-production"
-database_id = "ae1c1e4a-7254-47be-9f78-eed73ec264ae"
+database_id = "34c83d16-680c-4656-b2cd-be00c60c1db2"
 
 [env.production.ai]
 binding = "AI"
@@ -44,16 +44,16 @@ name = "leverage-ai-cms-dev"
 
 [[env.development.kv_namespaces]]
 binding = "CONTENT"
-id = "4c59b1de85d14cceaedb3e035f14ae44"
+id = "8aa7ae21fcd6492a9c60a238d5d83e54"
 
 [[env.development.kv_namespaces]]
 binding = "USERS"
-id = "9752b6b3810746179e454de37eb8c4b0"
+id = "b43c3075153246de9abadfa1b7a53125"
 
 # CACHE KV namespace - TODO: Create separate dev cache namespace
 # [[env.development.kv_namespaces]]
 # binding = "CACHE"
-# id = "YOUR_DEV_CACHE_KV_ID"
+# id = "5aec1ca2eef74413b44865535e43aa81"
 
 [[env.development.vectorize]]
 binding = "SEARCH_INDEX"
@@ -62,7 +62,7 @@ index_name = "cms-search-dev"
 [[env.development.d1_databases]]
 binding = "DB"
 database_name = "cms-production-dev"
-database_id = "ae1c1e4a-7254-47be-9f78-eed73ec264ae"
+database_id = "22b8a8f7-d061-43ec-965d-c5369ce81c44"
 
 [env.development.ai]
 binding = "AI"
